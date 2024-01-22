@@ -1,11 +1,13 @@
 import express from "express";
 import type { Express, Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+import cors from "cors";
 
 const app: Express = express();
 const PORT = 8080;
 
 app.use(express.json());
+app.use(cors());
 const prisma = new PrismaClient();
 
 app.get("/allTodos", async (req: Request, res: Response) => {
