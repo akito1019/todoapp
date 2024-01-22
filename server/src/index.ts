@@ -19,9 +19,10 @@ app.get("/allTodos", async (req: Request, res: Response) => {
 app.post("/createTodo", async (req: Request, res: Response) => {
   try {
     // Todoを作成する
-    const { title, isCompleted } = req.body;
+    const { time, title, isCompleted } = req.body;
     const createTodo = await prisma.todo.create({
       data: {
+        time,
         title,
         isCompleted,
       },
@@ -35,10 +36,11 @@ app.post("/createTodo", async (req: Request, res: Response) => {
 app.put("/editTodo/:id", async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
-    const { title, isCompleted } = req.body;
+    const { time, title, isCompleted } = req.body;
     const editTodo = await prisma.todo.update({
       where: { id },
       data: {
+        time,
         title,
         isCompleted,
       },

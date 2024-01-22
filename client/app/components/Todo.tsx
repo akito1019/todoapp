@@ -13,6 +13,7 @@ const Todo = ({ todo }: TodoProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   /* 以下が無いとhandleEditを実行したら既存のタイトルが消えてしまうため　*/
   const [editedTitle, setEditedTitle] = useState<string>(todo.title);
+  const [editedTime, setEditedTime] = useState<string>(todo.time);
   /* 以下のコードを追加したことにより、Todoをfeach、キャッシュした状態でfeachできるカスタムフックスを作成 */
   const { todos, isLoading, error, mutate } = useTodos();
 
@@ -24,7 +25,7 @@ const Todo = ({ todo }: TodoProps) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title: editedTitle }),
+        body: JSON.stringify({ title: editedTitle, time: editedTime }),
       });
 
       /**以下のコードが無いとクライアント側でリアルタイムで更新されない。
@@ -103,6 +104,22 @@ const Todo = ({ todo }: TodoProps) => {
             <label className="ml-3 block text-gray-900">
               {isEditing ? (
                 <input
+                  type="time"
+                  className="border rounded py-1 px-2 ml-2"
+                  value={editedTime}
+                  onChange={(e) => setEditedTime(e.target.value)}
+                />
+              ) : (
+                <span
+                  className={`text-lg font-medium ml-10 mr-2 ${
+                    todo.isCompleted ? "line-through" : ""
+                  }`}
+                >
+                  {todo.time}
+                </span>
+              )}
+              {isEditing ? (
+                <input
                   type="text"
                   className="border rounded py-1 px-2"
                   value={editedTitle}
@@ -110,7 +127,7 @@ const Todo = ({ todo }: TodoProps) => {
                 />
               ) : (
                 <span
-                  className={`text-lg font-medium mr-2 ${
+                  className={`text-lg font-medium ml-10 mr-2 ${
                     todo.isCompleted ? "line-through" : ""
                   }`}
                 >
